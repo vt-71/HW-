@@ -7,12 +7,12 @@ class Student:
         self.grades = {}
         
         
-    def rate_rw(self, reviewer, course, grade):
-        if isinstance(reviewer, Reviewer) and course in reviewer.courses_attached:
-                if course in reviewer.grades:
-                    reviewer.grades[course] += [grade]
+    def rate_lect(self, lecturer, course, grade):
+        if isinstance(lecturer,Lecturer) and course in self.courses_in_progress:
+                if course in lecturer.grades:
+                    lecturer.grades[course] += [grade]
                 else:
-                    reviewer.grades[course] = [grade]
+                    lecturer.grades[course] = [grade]
         else:
                 return 'Ошибка'
      
@@ -27,11 +27,12 @@ class Mentor:
 class Lecturer(Mentor):
         def __init__(self, name, surname):
             super().__init__(name, surname)
+            self.grades = {}
 
 class Reviewer(Mentor):
         def __init__(self, name, surname):
             super().__init__(name, surname)
-            self.grades = {}
+
              
         def rate_hw(self, student, course, grade):  
             if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
@@ -55,19 +56,20 @@ Reviewer_2.courses_attached += ['Python', 'GIT']
 
 
 Lecturer_1 = Lecturer('Vadimir', 'Petrov')
+Lecturer_1.courses_attached += ['Python']
 Lecturer_2 = Lecturer('Sergey', 'Ponomarev')
-# Lecturer.courses_attached += ['Python']
+Lecturer_2.courses_attached += ['Python', 'GIT']
  
 Reviewer_1.rate_hw(student_1, 'Python', 10)
 Reviewer_1.rate_hw(student_1, 'Python', 8)
 Reviewer_2.rate_hw(student_2, 'GIT', 6)
 
 
-student_1.rate_rw(Reviewer_2, 'Python', 9)
-student_1.rate_rw(Reviewer_1, 'Python', 7)
-student_2.rate_rw(Reviewer_2, 'GIT', 5)
-print(Reviewer_1.__dict__)
-print(Reviewer_2.__dict__)
+student_1.rate_lect(Lecturer_2, 'Python', 9)
+student_1.rate_lect(Lecturer_1, 'Python', 7)
+student_2.rate_lect(Lecturer_2, 'GIT', 5)
+print(Lecturer_1.__dict__)
+print(Lecturer_2.__dict__)
 
 cool_mentor = Mentor('Some', 'Buddy')
 cool_mentor.courses_attached += ['Python']
