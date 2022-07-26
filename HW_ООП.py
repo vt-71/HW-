@@ -8,6 +8,7 @@ class Student:
         
         
     def rate_lect(self, lecturer, course, grade):
+    # Внесение оценки лекторам студентами
         if isinstance(lecturer,Lecturer) and course in self.courses_in_progress:
                 if course in lecturer.grades:
                     lecturer.grades[course] += [grade]
@@ -15,6 +16,23 @@ class Student:
                     lecturer.grades[course] = [grade]
         else:
                 return 'Ошибка'
+            
+    def averade_grade (self, grades):
+    #  Средняя оценка
+        counter = 0
+        total_grades = 0
+        for grades in grades.values():
+            for grade in grades:               
+                total_grades = total_grades + grade
+                counter += 1
+        if counter == 0:
+            return 0
+        else:        
+            return total_grades / counter
+        
+    def __str__(self) -> str:
+         res = f'Средняя оценка за ДЗ = {self.averade_grade ()}'
+         return res
      
 class Mentor:
     def __init__(self, name, surname):
@@ -28,6 +46,9 @@ class Lecturer(Mentor):
         def __init__(self, name, surname):
             super().__init__(name, surname)
             self.grades = {}
+            
+        def averade_grade (self, grades):
+            print(Student.averade_grade (self, grades))
 
 class Reviewer(Mentor):
         def __init__(self, name, surname):
@@ -63,13 +84,18 @@ Lecturer_2.courses_attached += ['Python', 'GIT']
 Reviewer_1.rate_hw(student_1, 'Python', 10)
 Reviewer_1.rate_hw(student_1, 'Python', 8)
 Reviewer_2.rate_hw(student_2, 'GIT', 6)
-
+# print(student_1.__dict__)
+# print(student_1.__dict__)
+print(student_2.averade_grade(student_1.grades))
+print(student_1.averade_grade(student_2.grades))
+# print(student_2)
 
 student_1.rate_lect(Lecturer_2, 'Python', 9)
-student_1.rate_lect(Lecturer_1, 'Python', 7)
-student_2.rate_lect(Lecturer_2, 'GIT', 5)
-print(Lecturer_1.__dict__)
-print(Lecturer_2.__dict__)
+student_1.rate_lect(Lecturer_2, 'Python', 7)
+student_2.rate_lect(Lecturer_1, 'GIT', 3)
+# print(Lecturer_2.grades)
+# print(Lecturer_1.averade_grade(Lecturer_1.grades))
+# print(student_1.averade_grade(Lecturer_1.grades))
 
 cool_mentor = Mentor('Some', 'Buddy')
 cool_mentor.courses_attached += ['Python']
