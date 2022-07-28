@@ -36,6 +36,8 @@ class Student:
         else:        
             return total_grades / counter
         
+
+        
     def __lt__(self,other):
         # Сравнение средних оценок студентов 
             if isinstance(self, Student) and isinstance(other, Student):  
@@ -107,7 +109,27 @@ class Reviewer(Mentor):
          res = f'Имя: {self.name}\n'\
                f'Фамилия: {self.surname}\n'
          return res  
+     
 
+       
+def avr_grades_students(list_people, course):
+    # Определение средней оценки за курс всех студентов и лекторов за лекции
+        counter_1 = 0
+        avr_grades = 0    
+        for i in list_people:
+            a = i.grades.values()
+                  
+            if course in i.grades.keys(): 
+                for grade in a:
+                   for a in grade:
+                       avr_grades += a
+                       counter_1  += 1
+                res =  f' Средняя оценка  {avr_grades / counter_1}' 
+        return res
+
+        
+        
+        
 student_1 = Student('Ruoy', 'Eman', 'men')
 student_2 = Student('Natalia', 'Shirokova', 'woman')
 student_1.courses_in_progress += ['Python']
@@ -130,7 +152,7 @@ Lecturer_2.courses_attached += ['Python', 'GIT']
 
  
 Reviewer_1.rate_hw(student_1, 'Python', 20)
-Reviewer_1.rate_hw(student_1, 'Python', 8)
+Reviewer_1.rate_hw(student_1, 'Python', 5)
 Reviewer_2.rate_hw(student_2, 'GIT', 8)
 
 
@@ -147,8 +169,9 @@ print(Reviewer_1)
 
 print(student_1 < student_2)
 print(Lecturer_2 > Lecturer_1)
-# print(student_1.__dict__)
-# print(Lecturer_1.__dict__)
-# print(Reviewer_1.__dict__)
+print(student_1.__dict__)
+print(Lecturer_1.__dict__)
+print(Reviewer_1.__dict__)
 
-
+print(avr_grades_students([student_1, student_2], 'Python'))
+print(avr_grades_students([Lecturer_1, Lecturer_2], 'GIT'))
