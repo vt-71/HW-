@@ -23,7 +23,7 @@ class Student:
             
     
             
-    def _averade_grade (self, grades):
+    def _average_grade (self, grades):
     #  Средняя оценка
         counter = 0
         total_grades = 0
@@ -37,14 +37,19 @@ class Student:
             return total_grades / counter
         
     def __lt__(self,other):
-        # Сравнение средних оценок студентов
-        if self._averade_grade() < other._averade_grade():
-            print(f'У студента {self.name} средняя оценка за ДЗ выше')
-        
+        # Сравнение средних оценок студентов 
+            if isinstance(self, Student) and isinstance(other, Student):  
+                if self._average_grade(self.grades) > other._average_grade(other.grades):
+                    return (f'У {self.name} средняя оценка за ДЗ выше, чем у {other.name}')
+                elif self._average_grade(self.grades) < other._average_grade(other.grades):
+                    return(f'У {self.name} средняя оценка за ДЗ ниже, чем у {other.name}')
+            else:
+             print("Ошибка введенных данных!")        
+             
     def __str__(self):
          res = f'Имя: {self.name}\n'\
                f'Фамилия: {self.surname}\n'\
-               f'Средняя оценка за ДЗ: {self._averade_grade(self.grades)}\n'\
+               f'Средняя оценка за ДЗ: {self._average_grade(self.grades)}\n'\
                f'Курсы в процессе обучения: {", ".join(self.courses_in_progress)}\n'\
                f'Завершенные курсы: {", ".join(self.finished_courses)}\n'
          return res
@@ -54,19 +59,35 @@ class Mentor:
         self.name = name
         self.surname = surname
         self.courses_attached = []
+           
         
 
         
 class Lecturer(Mentor):
         def __init__(self, name, surname):
             super().__init__(name, surname)
-            self.grades = {}           
+            self.grades = {}   
+        
+        def _average_grade (self, grades):
+            return Student._average_grade (self, grades)
+                    
    
         def __str__(self):
          res = f'Имя: {self.name}\n'\
                f'Фамилия: {self.surname}\n'\
-               f'Средняя оценка за лекции: {Student._averade_grade(self, self.grades)}\n'
-         return res        
+               f'Средняя оценка за лекции: {Student._average_grade(self, self.grades)}\n'
+         return res  
+     
+
+        def __lt__(self,other):
+        # Сравнение средних оценок Лекторов 
+            if isinstance(self, Lecturer) and isinstance(other, Lecturer):  
+                if Student._average_grade(self, self.grades) > Student._average_grade(self, other.grades):
+                    return (f'У {self.name} средняя оценка за лекции выше, чем у {other.name}')
+                elif self._average_grade(self.grades) < other._average_grade(other.grades):
+                    return(f'У {self.name} средняя оценка за лекции ниже, чем у {other.name}')
+            else:
+                print("Ошибка введенных данных!")         
 
 class Reviewer(Mentor):
         def __init__(self, name, surname):
@@ -95,6 +116,7 @@ student_1.add_courses('Введение в Python')
 student_2.add_courses('ООП')
 
 
+
 Reviewer_1 = Reviewer('Li', 'Pack')
 Reviewer_1.courses_attached += ['Python']
 Reviewer_2 = Reviewer('Gon', 'Ruby')
@@ -116,20 +138,17 @@ student_1.rate_lect(Lecturer_2, 'Python', 9)
 student_1.rate_lect(Lecturer_2, 'Python', 7)
 student_2.rate_lect(Lecturer_1, 'GIT', 3)
 
-print(student_1 > student_2)
+Lecturer_1._average_grade(Lecturer_1.grades)
+Lecturer_2._average_grade(Lecturer_2.grades)
 
-# print(student_1)
-# print(student_2)
-# print(Lecturer_1)
-# print(Lecturer_2)
-# print(Reviewer_1)
-# print(Reviewer_2)
+print(student_1)
+print(Lecturer_2)
+print(Reviewer_1)
+
+print(student_1 < student_2)
+print(Lecturer_2 > Lecturer_1)
+# print(student_1.__dict__)
+# print(Lecturer_1.__dict__)
+# print(Reviewer_1.__dict__)
 
 
-cool_mentor = Mentor('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
- 
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
- 
